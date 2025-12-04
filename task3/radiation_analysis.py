@@ -38,7 +38,7 @@ if radiation_col not in available_cols:
     for col_name in available_cols:
         if "radiation" in col_name.lower():
             radiation_col = col_name
-            print(f"Using column: {radiation_col}")
+            print("Using column: {}".format(radiation_col))
             break
 
 # Calculate percentage of radiation > 15MJ/m2 per month across all districts

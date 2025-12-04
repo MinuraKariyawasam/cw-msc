@@ -48,7 +48,7 @@ if temp_col not in available_cols:
     for col_name in available_cols:
         if "temperature" in col_name.lower() and "max" in col_name.lower():
             temp_col = col_name
-            print(f"Using column: {temp_col}")
+            print("Using column: {}".format(temp_col))
             break
 
 # Step 1: Find the hottest months (by average max temperature)
