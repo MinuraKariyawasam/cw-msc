@@ -70,6 +70,7 @@ services:
       - ./task2-hadoop.env
     environment:
       - SERVICE_PRECONDITION=namenode:8020 namenode:50070 datanode:50075
+    command: /run.sh
     ports:
       - "8088:8088"  # ResourceManager Web UI
       - "8032:8032"  # ResourceManager address
