@@ -46,10 +46,12 @@ services:
     env_file:
       - ./task2-hadoop.env
     environment:
-      - SERVICE_PRECONDITION=namenode:8020
+      - SERVICE_PRECONDITION=namenode:50070
       - HDFS_NAMENODE_RPC_ADDRESS=namenode:8020
     volumes:
       - datanode_data:/hadoop/dfs/data
+    ports:
+      - "50075:50075"  # DataNode HTTP
     depends_on:
       namenode:
         condition: service_healthy
@@ -67,7 +69,7 @@ services:
     env_file:
       - ./task2-hadoop.env
     environment:
-      - SERVICE_PRECONDITION=namenode:8020 datanode:50075
+      - SERVICE_PRECONDITION=namenode:8020 namenode:50070 datanode:50075
     ports:
       - "8088:8088"  # ResourceManager Web UI
       - "8032:8032"  # ResourceManager address
@@ -90,7 +92,7 @@ services:
     env_file:
       - ./task2-hadoop.env
     environment:
-      - SERVICE_PRECONDITION=namenode:8020 datanode:50075 resourcemanager:8088
+      - SERVICE_PRECONDITION=namenode:8020 namenode:50070 datanode:50075 resourcemanager:8088
     depends_on:
       - resourcemanager
     networks:
