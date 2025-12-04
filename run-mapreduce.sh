@@ -42,7 +42,7 @@ docker exec -it namenode bash -c "
 "
 
 echo ""
-echo "[4/4] Checking output..."
+echo "[4/6] Checking monthly summary output..."
 docker exec -it namenode bash -c "
   echo 'Output files:'
   hdfs dfs -ls /output/monthly
@@ -53,6 +53,27 @@ docker exec -it namenode bash -c "
 "
 
 echo ""
+echo "[5/6] Removing previous highest precipitation output (if exists)..."
+docker exec -it namenode bash -c "
+  hdfs dfs -rm -r -f /output/highest
+"
+
+echo ""
+echo "[6/6] Running HighestPrecipitation MapReduce job..."
+docker exec -it namenode bash -c "
+  hadoop jar /opt/mapreduce-jars/BigDataProject-1.0-SNAPSHOT.jar \
+    org.example.HighestPrecipitation \
+    /output/monthly \
+    /output/highest
+
+  echo ''
+  echo 'Highest precipitation output:'
+  hdfs dfs -cat /output/highest/part-*
+"
+
+echo ""
 echo "============================================================"
-echo "Done! Full output available at: /output/monthly in HDFS"
+echo "Done! Outputs available at:"
+echo "  - Monthly summary: /output/monthly"
+echo "  - Highest precipitation: /output/highest"
 echo "============================================================"
