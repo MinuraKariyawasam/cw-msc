@@ -15,10 +15,11 @@ echo ""
 echo "[1/4] Uploading weather data to HDFS..."
 docker exec -it namenode bash -c "
   # Create directory structure in HDFS
-  hdfs dfs -mkdir -p /opt/data
+  hdfs dfs -mkdir -p /opt/data/weather
 
-  # Upload weather data to HDFS (skip if already exists)
-  hdfs dfs -test -d /opt/data/weather || hdfs dfs -put /opt/data/weather /opt/data/
+  # Upload individual CSV files to HDFS (skip if already exists)
+  hdfs dfs -test -e /opt/data/weather/locationData.csv || hdfs dfs -put /opt/data/locationData.csv /opt/data/weather/
+  hdfs dfs -test -e /opt/data/weather/weatherData.csv || hdfs dfs -put /opt/data/weatherData.csv /opt/data/weather/
 
   # Verify upload
   echo 'Weather data in HDFS:'
