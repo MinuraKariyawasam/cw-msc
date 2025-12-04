@@ -62,7 +62,7 @@ services:
   # YARN ResourceManager - Job Scheduling and Resource Management
   # ---------------------------------------------------------------------------
   resourcemanager:
-    image: ramilu90/hive-datanode:1.0.0
+    image: ramilu90/hadoop-datanode
     container_name: resourcemanager
     platform: linux/amd64
     restart: always
@@ -70,7 +70,6 @@ services:
       - ./task2-hadoop.env
     environment:
       - SERVICE_PRECONDITION=namenode:8020 namenode:50070 datanode:50075
-    command: /run.sh
     ports:
       - "8088:8088"  # ResourceManager Web UI
       - "8032:8032"  # ResourceManager address
@@ -86,7 +85,7 @@ services:
   # YARN NodeManager - Container Execution
   # ---------------------------------------------------------------------------
   nodemanager:
-    image: ramilu90/hive-datanode:1.0.0
+    image: ramilu90/hadoop-datanode
     container_name: nodemanager
     platform: linux/amd64
     restart: always
