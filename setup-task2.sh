@@ -29,13 +29,46 @@ fi
 echo "✓ Docker is running"
 echo ""
 
-# Create sample directories for organization
-echo "Creating sample directory structure..."
-mkdir -p hive-scripts/task2
-mkdir -p spark-scripts/task2
-mkdir -p mapreduce-jars/task2
+# Copy data files from artifacts
+echo "Copying data files..."
+if [ -f "artifacts/locationData.csv" ] && [ -f "artifacts/weatherData.csv" ]; then
+    cp artifacts/locationData.csv data/
+    cp artifacts/weatherData.csv data/
+    echo "✓ Data files copied successfully"
+else
+    echo "⚠ Warning: Data files not found in artifacts/ directory"
+fi
+echo ""
 
-echo "✓ Sample structure created"
+# Copy Hive scripts from task2
+echo "Copying Hive scripts..."
+if [ -d "task2" ]; then
+    cp task2/*.hql hive-scripts/ 2>/dev/null
+    echo "✓ Hive scripts copied successfully"
+else
+    echo "⚠ Warning: task2/ directory not found"
+fi
+echo ""
+
+# Copy Spark scripts from task3
+echo "Copying Spark scripts..."
+if [ -d "task3" ]; then
+    cp task3/*.py spark-scripts/ 2>/dev/null
+    echo "✓ Spark scripts copied successfully"
+else
+    echo "⚠ Warning: task3/ directory not found"
+fi
+echo ""
+
+# Copy MapReduce JARs from task1 (if available)
+echo "Checking for MapReduce JARs..."
+if [ -d "task1/BigDataProject-1.0-SNAPSHOT" ]; then
+    cp task1/BigDataProject-1.0-SNAPSHOT/*.jar mapreduce-jars/ 2>/dev/null
+    echo "✓ MapReduce JARs copied successfully"
+else
+    echo "⚠ Warning: MapReduce JAR directory not found"
+    echo "  Place JAR files manually in mapreduce-jars/ if needed"
+fi
 echo ""
 
 # Display next steps
@@ -43,11 +76,11 @@ echo "=========================================="
 echo "Setup Complete!"
 echo "=========================================="
 echo ""
-echo "Next steps:"
-echo "1. Place your weather dataset CSV files in the 'data/' directory"
-echo "2. Place MapReduce JAR files in 'mapreduce-jars/' directory"
-echo "3. Place Hive scripts in 'hive-scripts/' directory"
-echo "4. Place Spark scripts in 'spark-scripts/' directory"
+echo "Files copied:"
+echo "  - CSV data files → data/"
+echo "  - Hive scripts → hive-scripts/"
+echo "  - Spark scripts → spark-scripts/"
+echo "  - MapReduce JARs → mapreduce-jars/ (if available)"
 echo ""
 echo "To start the environment:"
 echo "  docker-compose -f task2-docker-compose.yaml up -d"

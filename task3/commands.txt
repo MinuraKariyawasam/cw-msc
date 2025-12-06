@@ -1,0 +1,51 @@
+Similar to what you did in Task 1:
+# Enter the namenode container
+docker exec -it namenode bash
+
+# Inside the container:
+# Create HDFS directory for Hive
+hdfs dfs -mkdir -p /user/hive/warehouse/weather_data
+hdfs dfs -mkdir -p /user/hive/warehouse/location_dataf
+
+
+# Upload weather CSV to HDFS
+hdfs dfs -put /opt/data/weatherData.csv /user/hive/warehouse/weather_data/
+hdfs dfs -put -f /opt/data/locationData.csv /user/hive/warehouse/location_data/
+
+# Verify the upload
+hdfs dfs -ls /user/hive/warehouse/weather_data/
+hdfs dfs -ls /user/hive/warehouse/location_data/
+
+# Check the first few lines to confirm
+hdfs dfs -cat /user/hive/warehouse/weather_data/weatherData.csv | head -5
+hdfs dfs -cat /user/hive/warehouse/location_data/locationData.csv | head -5
+
+# Exit the container
+exit
+
+--
+
+# Query 1: Radiation Analysis
+docker exec -it spark-master /spark/bin/spark-submit \
+  --master spark://spark-master:7077 \
+  --driver-memory 2g \
+  --executor-memory 2g \
+  /opt/spark-scripts/task2/radiation_analysis.py
+
+# Query 2: Weekly Temperature
+docker exec -it spark-master /spark/bin/spark-submit \
+  --master spark://spark-master:7077 \
+  --driver-memory 2g \
+  --executor-memory 2g \
+  /opt/spark-scripts/task2/weekly_temperature.py
+
+
+--
+
+Step 5: View Results
+# View Radiation Analysis results
+docker exec -it namenode hdfs dfs -cat /user/output/task2_radiation/part-*.csv | head -20
+
+# View Weekly Temperature results
+docker exec -it namenode hdfs dfs -cat /user/output/task2_weekly_temp/part-*.csv | head -20
+
